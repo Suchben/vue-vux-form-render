@@ -1,6 +1,6 @@
 {
   "name": "vue-vux-form-render",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Mobile form render based on vue&vux. (also with other useful packages)",
   "main": "index.js",
   "scripts": {
@@ -14,9 +14,15 @@
   "author": "Mellos",
   "license": "ISC",
   "devDependencies": {
-    "vee-validate": "^2.0.0-rc.19",
     "vue": "^2.5.2",
-    "vue-core-image-upload": "^2.3.9",
     "vux": "^2.7.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Suchben/vue-vux-form-render.git"
+  },
+  "dependencies": {
+    "vee-validate": "^2.0.0-rc.19",
+    "vue-core-image-upload": "^2.3.9"
   }
 }

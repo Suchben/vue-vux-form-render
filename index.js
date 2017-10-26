@@ -1,4 +1,4 @@
 import seFormRender from './lib/seFormRender.vue'
-export {
+export default {
   seFormRender
 }

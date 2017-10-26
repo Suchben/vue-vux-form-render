@@ -1,0 +1,22 @@
+{
+  "name": "vue-vux-form-render",
+  "version": "1.0.0",
+  "description": "Mobile form render based on vue&vux. (also with other useful packages)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "vue",
+    "vux",
+    "form"
+  ],
+  "author": "Mellos",
+  "license": "ISC",
+  "devDependencies": {
+    "vee-validate": "^2.0.0-rc.19",
+    "vue": "^2.5.2",
+    "vue-core-image-upload": "^2.3.9",
+    "vux": "^2.7.0"
+  }
+}

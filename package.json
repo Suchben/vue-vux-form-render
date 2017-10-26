@@ -1,8 +1,8 @@
 {
   "name": "vue-vux-form-render",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Mobile form render based on vue&vux. (also with other useful packages)",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

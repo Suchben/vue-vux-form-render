@@ -518,7 +518,6 @@ export default {
 </script>
 
 <style lang="less">
-@import '../../../common/style.less';
 .page-formRender {
   .g-core-image-corp-container {
     z-index: 9999!important;
@@ -555,8 +554,8 @@ export default {
     font-size: 64px;
     line-height: 98px;
     text-align: center;
-    color: @color-silver-light-extra;
-    background-color: @color-gray-light-extra;
+    color: #C0CCDA;
+    background-color: #EFF2F7;
   }
   .weui-cell {
     padding: 5px 15px;
@@ -678,7 +677,7 @@ export default {
     }
     .portrait {
       margin: 0;
-      box-shadow: 0 0 3px 1px @color-silver;
+      box-shadow: 0 0 3px 1px #8492A6;
       .mask {
         background-color: rgba(0, 0, 0, 0.2)
       }
@@ -773,7 +772,7 @@ export default {
         color: #F4333c;
       }
       a:last-child {
-        color: @color-green;
+        color: #09BB07;
       }
     }
   }

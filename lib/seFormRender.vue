@@ -520,10 +520,10 @@ export default {
 <style lang="less">
 .page-formRender {
   .g-core-image-corp-container {
-    z-index: 9999!important;
-    top: 44px!important;
+    z-index: 9999 !important;
+    top: 44px !important;
     .image-aside {
-      top: 50px!important;
+      top: 50px !important;
     }
   }
   .g-core-image-upload-btn {
@@ -531,11 +531,12 @@ export default {
     line-height: 0;
   }
   .g-core-image-upload-form {
-    width: auto!important;
-    height: 100%!important;
+    width: auto !important;
+    height: 100% !important;
   }
   text-align: left;
-  .input {}
+  .input {
+  }
   .is-danger {
     border-color: red;
   }
@@ -554,8 +555,8 @@ export default {
     font-size: 64px;
     line-height: 98px;
     text-align: center;
-    color: #C0CCDA;
-    background-color: #EFF2F7;
+    color: #c0ccda;
+    background-color: #eff2f7;
   }
   .weui-cell {
     padding: 5px 15px;
@@ -580,11 +581,11 @@ export default {
     top: 0;
     right: 0;
     height: 1px;
-    border-top: 1px solid #D9D9D9;
+    border-top: 1px solid #d9d9d9;
     border-top-width: 1px;
     border-top-style: solid;
     border-top-color: rgb(217, 217, 217);
-    color: #D9D9D9;
+    color: #d9d9d9;
     -webkit-transform-origin: 0 0;
     transform-origin: 0 0;
     -webkit-transform: scaleY(0.5);
@@ -602,7 +603,7 @@ export default {
     font-size: 15px;
     line-height: 1.2em;
     .password-input {
-      margin: 4px 0 5px!important;
+      margin: 4px 0 5px !important;
       display: flex;
       align-items: center;
       label {
@@ -619,7 +620,7 @@ export default {
       }
     }
     .mobile-validate {
-      margin: 4px 0 5px!important;
+      margin: 4px 0 5px !important;
       display: flex;
       align-items: center;
       label {
@@ -642,44 +643,44 @@ export default {
       font-size: 15px;
     }
     input:disabled {
-      color: #999!important;
+      color: #999 !important;
     }
     textarea:read-only {
-      color: #999!important;
+      color: #999 !important;
     }
     .radio input {
       margin: 5px;
     }
     .require::before {
-      content: '*';
+      content: "*";
       color: red;
       position: absolute;
       left: 5px;
     }
     .require2::before {
-      content: '*';
+      content: "*";
       color: red;
       position: absolute;
       left: 5px;
       line-height: 50px;
     }
     .isrequire {
-      content: '*';
+      content: "*";
       color: red;
     }
-    >p:first-child {
+    > p:first-child {
       margin: 10px 0;
     }
-    >p:last-child {
+    > p:last-child {
       line-height: 1em;
       font-size: 11px;
       color: red;
     }
     .portrait {
       margin: 0;
-      box-shadow: 0 0 3px 1px #8492A6;
+      box-shadow: 0 0 3px 1px #8492a6;
       .mask {
-        background-color: rgba(0, 0, 0, 0.2)
+        background-color: rgba(0, 0, 0, 0.2);
       }
     }
     .text-input {
@@ -730,14 +731,14 @@ export default {
     }
     .listPlaceHolder {
       .weui-cell__bd select {
-        color: gray!important;
+        color: gray !important;
       }
     }
     .vux-selector-readonly {
       text-align: left;
     }
   }
-  .vux-cell-box>div {
+  .vux-cell-box > div {
     width: 100%;
     padding: 0;
   }
@@ -769,10 +770,10 @@ export default {
         padding: 5px 5px;
       }
       a:first-child {
-        color: #F4333c;
+        color: #f4333c;
       }
       a:last-child {
-        color: #09BB07;
+        color: #09bb07;
       }
     }
   }
@@ -792,6 +793,14 @@ export default {
     button {
       padding: 6px 20px;
     }
+  }
+  .btn-primary {
+    font-size: 15px;
+    color: white;
+    background-color: #09BB07;
+    border: solid 1px #09BB07;
+    border-radius: 4px;
+    padding: 8px 10px;
   }
 }
 </style>

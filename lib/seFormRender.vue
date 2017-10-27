@@ -1,6 +1,6 @@
 <template>
   <div class="page-formRender">
-    <form>
+    <form data-vv-scope="auto-form">
       <template v-for="(items, index) in data">
         <group v-if="isArray(items)" :key="index">
           <template v-for="(item, index) in items">
@@ -8,20 +8,20 @@
               <div class="content field" slot="title">
                 <p class="input">
                   <label class="label" :class="{require: item.validate&&item.validate.indexOf('required') !== -1}" :for="item.model">{{item.label}}</label>
-                  <input :disabled="item.disabled" v-model="item.value" v-validate="item.validate" :class="{'input': true, 'is-danger': errorv.has(item.model) }" :name="item.model" type="text" :placeholder="item.placeholder || ('请输入' + item.label.substring(0, item.label.lastIndexOf(':') !== -1? item.label.lastIndexOf(':'): item.label.length))" @change="onInputChange(item)">
+                  <input :disabled="item.disabled" v-model="item.value" v-validate="item.validate" :class="{'input': true, 'is-danger': errorv.has('auto-form.' + item.model) }" :name="item.model" type="text" :placeholder="item.placeholder || ('请输入' + item.label.substring(0, item.label.lastIndexOf(':') !== -1? item.label.lastIndexOf(':'): item.label.length))" @change="onInputChange(item)">
                 </p>
-                <p v-show="errorv.has(item.model)" class="help is-danger">{{ errorv.first(item.model) }}</p>
+                <p v-show="errorv.has('auto-form.' + item.model)" class="help is-danger">{{ errorv.first('auto-form.' + item.model) }}</p>
               </div>
             </cell>
             <cell v-if="item.type === 'passwordInput'" :key="index">
               <div class="content field" slot="title">
                 <p class="password-input">
                   <label class="label" :class="{require: item.validate&&item.validate.indexOf('required') !== -1}" :for="item.model">{{item.label}}</label>
-                  <input v-show="!item.showPassword" :disabled="item.disabled" v-model="item.value" v-validate="item.validate" :class="{'input': true, 'is-danger': errorv.has(item.model) }" :name="item.model" type="password" :placeholder="item.placeholder || ('请输入' + item.label.substring(0, item.label.lastIndexOf(':') !== -1? item.label.lastIndexOf(':'): item.label.length))" @change="onInputChange(item)">
-                  <input v-show="item.showPassword" :disabled="item.disabled" v-model="item.value" v-validate="item.validate" :class="{'input': true, 'is-danger': errorv.has(item.model) }" :name="item.model" type="text" :placeholder="item.placeholder || ('请输入' + item.label.substring(0, item.label.lastIndexOf(':') !== -1? item.label.lastIndexOf(':'): item.label.length))" @change="onInputChange(item)">
+                  <input key="1" v-if="!item.showPassword" :disabled="item.disabled" v-model="item.value" v-validate="item.validate" :class="{'input': true, 'is-danger': errorv.has('auto-form.' + item.model) }" :name="item.model" type="password" :placeholder="item.placeholder || ('请输入' + item.label.substring(0, item.label.lastIndexOf(':') !== -1? item.label.lastIndexOf(':'): item.label.length))" @change="onInputChange(item)">
+                  <input key="2" v-if="item.showPassword" :disabled="item.disabled" v-model="item.value" v-validate="item.validate" :class="{'input': true, 'is-danger': errorv.has('auto-form.' + item.model) }" :name="item.model" type="text" :placeholder="item.placeholder || ('请输入' + item.label.substring(0, item.label.lastIndexOf(':') !== -1? item.label.lastIndexOf(':'): item.label.length))" @change="onInputChange(item)">
                   <a @click="onPasswordInputClick(item)">{{item.showPassword? '隐藏': '显示'}}</a>
                 </p>
-                <p v-show="errorv.has(item.model)" class="help is-danger">{{ errorv.first(item.model) }}</p>
+                <p v-show="errorv.has('auto-form.' + item.model)" class="help is-danger">{{ errorv.first('auto-form.' + item.model) }}</p>
               </div>
             </cell>
             <cell v-else-if="item.type === 'radioInput'" :key="index">
@@ -33,7 +33,7 @@
                       <input :disabled="item.disabled" v-model="item.value" :name="item.model" v-validate="item.validate" :value="ite.value" type="radio" @click="item.onClick?item.onClick(ite.value):''">{{ite.name}}
                     </label>
                   </span>
-                  <p class="help is-danger" v-show="errorv.has(item.model)">{{ errorv.first(item.model) }}</p>
+                  <p class="help is-danger" v-show="errorv.has('auto-form.'+item.model)">{{ errorv.first('auto-form.'+item.model) }}</p>
               </div>
             </cell>
             <cell v-else-if="item.type === 'checkBox'" :key="index">
@@ -45,92 +45,68 @@
                     <input :disabled="item.disabled" v-model="item.value" :name="item.model" v-validate="item.validate" :value="ite.value" type="checkbox">{{ite.name}}
                   </label>
                 </p>
-                <p class="help is-danger" v-show="errorv.has(item.model)">{{ errorv.first(item.model) }}</p>
+                <p class="help is-danger" v-show="errorv.has('auto-form.'+item.model)">{{ errorv.first('auto-form.'+item.model) }}</p>
               </div>
             </cell>
             <div v-else-if="item.type === 'listSelecter'" :key="index" class="content">
               <p style="margin: 0;">
                 <label class="label" :class="{require2: item.validate&&item.validate.indexOf('required') !== -1}" :for="item.model"></label>
-                <selector :class="'needsclick selecter '+(item.readonly?'listReadonly':'listEditable')+(item.value==='-1'?' listPlaceHolder':'')" :readonly="item.readonly" :placeholder="item.placeholder || ('请选择' + item.label.substring(0, item.label.lastIndexOf(':') !== -1? item.label.lastIndexOf(':'): item.label.length))" :title="item.label" :name="item.model" v-validate="item.validate" :options="item.options" v-model="item.value" @on-change="onSelectorChange(item)"></selector>
+                <selector data-vv-scope="auto-form" :class="'needsclick selecter '+(item.readonly?'listReadonly':'listEditable')+(item.value==='-1'?' listPlaceHolder':'')" :readonly="item.readonly" v-validate="item.validate" :placeholder="item.placeholder || ('请选择' + item.label.substring(0, item.label.lastIndexOf(':') !== -1? item.label.lastIndexOf(':'): item.label.length))" :title="item.label" :name="item.model" :options="item.options" v-model="item.value" @on-change="onSelectorChange(item)"></selector>
               </p>
-              <p style="margin-left: 15px; margin-bottom: 5px;" v-show="errorv.has(item.model)" class="help is-danger">{{ errorv.first(item.model) }}</p>
+              <p style="margin-left: 15px; margin-bottom: 5px;" v-show="errorv.has('auto-form.'+item.model)" class="help is-danger">{{ errorv.first('auto-form.'+item.model) }}</p>
             </div>
             <cell v-if="item.type === 'pageSelecter'" :key="index" :is-link="!item.disabled" @click.native="onPageSelecterClick(item)">
               <div class="content" slot="title">
                 <p style="display: flex;">
                   <label style="flex: 0 0 auto; margin-right: 5px;" class="label" :class="{require: item.validate&&item.validate.indexOf('required') !== -1}" :for="item.model">{{item.label}}</label>
-                  <input hidden v-model="item.value" v-validate="item.validate" :class="{'input': true, 'is-danger': errorv.has(item.model) }" :name="item.model" type="text" :placeholder="item.placeholder || ('请选择' + item.label.substring(0, item.label.lastIndexOf(':') !== -1? item.label.lastIndexOf(':'): item.label.length))">
+                  <input hidden v-model="item.value" v-validate="item.validate" :class="{'input': true, 'is-danger': errorv.has('auto-form.' + item.model) }" :name="item.model" type="text" :placeholder="item.placeholder || ('请选择' + item.label.substring(0, item.label.lastIndexOf(':') !== -1? item.label.lastIndexOf(':'): item.label.length))">
                   <span :style="item.valueDesc? 'color: black;': 'color: gray;' + 'flex: 1 1 100%; background: transparent;'">{{item.valueDesc || (item.placeholder || ('请选择' + item.label.substring(0, item.label.lastIndexOf(':') !== -1? item.label.lastIndexOf(':'): item.label.length)))}}</span>
                   <!-- <input style="flex: 1 1 100%; background: transparent;" class="input-disabled" disabled :placeholder="item.placeholder || ('请选择' + item.label.substring(0, item.label.lastIndexOf(':') !== -1? item.label.lastIndexOf(':'): item.label.length))" v-model="item.valueDesc"></input> -->
                 </p>
-                <p v-show="errorv.has(item.model)" class="help is-danger">{{ errorv.first(item.model) }}</p>
+                <p v-show="errorv.has('auto-form.'+item.model)" class="help is-danger">{{ errorv.first('auto-form.'+item.model) }}</p>
               </div>
             </cell>
             <div style="padding: 5px 0;" v-else-if="item.type === 'textInput'" class="content" :key="index">
               <p style="margin: 0; ">
                 <label style="margin-bottom: 5px; padding: 5px 15px; line-height: 1.3em;" :class="{require: item.validate&&item.validate.indexOf('required') !== -1}" :for="item.model">{{item.label}}</label>
-                <x-textarea :readonly="item.disabled" style="margin-top: 5px; min-height: 20px;" class="text-input" :name="item.model" v-model="item.value" v-validate="item.validate" :placeholder="item.placeholder || ('请输入' + item.label.substring(0, item.label.lastIndexOf(':') !== -1? item.label.lastIndexOf(':'): item.label.length))" autosize></x-textarea>
+                <x-textarea data-vv-scope="auto-form" :readonly="item.disabled" style="margin-top: 5px; min-height: 20px;" class="text-input" :name="item.model" v-model="item.value" v-validate="item.validate" :placeholder="item.placeholder || ('请输入' + item.label.substring(0, item.label.lastIndexOf(':') !== -1? item.label.lastIndexOf(':'): item.label.length))" autosize></x-textarea>
               </p>
-              <p style="margin-left: 15px;" v-show="errorv.has(item.model)" class="help is-danger">{{ errorv.first(item.model) }}</p>
+              <p style="margin-left: 15px;" v-show="errorv.has('auto-form.'+item.model)" class="help is-danger">{{ errorv.first('auto-form.'+item.model) }}</p>
             </div>
             <div class="content textInputField" v-else-if="item.type === 'textInputField'" :key="index">
               <p style="margin: 0; display: flex; line-height: 1.3em;">
                 <label style="padding: 10px 0 10px 15px; flex: 0 0 auto;" :class="{require: item.validate&&item.validate.indexOf('required') !== -1}" :for="item.model">{{item.label}}</label>
-                <x-textarea ref="textInputField" :readonly="item.disabled" style="padding: 10px 6px; flex: 1 1 100%; word-break: break-all;" :rows="1" class="text-input" :name="item.model" v-model="item.value" v-validate="item.validate" :placeholder="item.placeholder || ('请输入' + item.label.substring(0, item.label.lastIndexOf(':') !== -1? item.label.lastIndexOf(':'): item.label.length))" autosize></x-textarea>
+                <x-textarea data-vv-scope="auto-form" ref="textInputField" :readonly="item.disabled" style="padding: 10px 6px; flex: 1 1 100%; word-break: break-all;" :rows="1" class="text-input" :name="item.model" v-model="item.value" v-validate="item.validate" :placeholder="item.placeholder || ('请输入' + item.label.substring(0, item.label.lastIndexOf(':') !== -1? item.label.lastIndexOf(':'): item.label.length))" autosize></x-textarea>
               </p>
-              <p style="margin-left: 15px;" v-show="errorv.has(item.model)" class="help is-danger">{{ errorv.first(item.model) }}</p>
+              <p style="margin-left: 15px;" v-show="errorv.has('auto-form.'+item.model)" class="help is-danger">{{ errorv.first('auto-form.'+item.model) }}</p>
             </div>
             <cell style="height: 0; padding: 0;" v-else-if="item.type === 'uploadFile'" :key="index">
               <div class="content" style="position: absolute; right: 10px; top: 5px; z-index: 2; border: solid 2px white;">
                 <div class="portrait">
-                  <!-- <label :class="{require: item.validate&&item.validate.indexOf('required') !== -1}" :for="item.model">{{item.label}}</label> -->
-                  <vue-core-image-upload inputAccept="image/*" :key="count" :isXhr="false" :crop-btn="{'ok': '确定', 'cancel': '取消'}" crop-ratio="413:626" :name="item.model" crop="local" :data="item.data" :max-file-size="5242880" @imagechanged="onImageChanged($event, item)">
+                  <vue-core-image-upload data-vv-scope="auto-form" v-validate="item.validate" v-model="item.value" inputAccept="image/*" :key="count" :isXhr="false" :crop-btn="{'ok': '确定', 'cancel': '取消'}" crop-ratio="413:626" :name="item.model" crop="local" :data="item.data" :max-file-size="5242880" @imagechanged="onImageChanged($event, item)">
                     <img class="user-icon" :src="item.value? _imageUrlWithPath(item.value): logoSrc" />
-                    <!-- <i v-else class="iconfont icon-me user-i"></i> -->
                   </vue-core-image-upload>
                 </div>
-                <p v-show="validator.errors.has(item.model)" class="help is-danger">{{ validator.errors.first(item.model) }}</p>
-              </div>
-            </cell>
-            <cell v-else-if="item.type === 'selectDate2' && !item.hidden" :key="index">
-              <div class="content radio" slot="title">
-                <p>
-                  <label :class="{require: item.validate&&item.validate.indexOf('required') !== -1}" :for="item.model">{{item.label}}</label>
-                  <!-- <input :disabled="item.disabled" type="date" v-validate="item.validate" :name="item.model" v-model="item.value" /> -->
-                  <datetime></datetime>
-                </p>
-                <p class="help is-danger" v-show="errorv.has(item.model)">{{ errorv.first(item.model) }}</p>
+                <p v-show="errorv.has('auto-form.'+item.model)" class="help is-danger">{{ errorv.first('auto-form.'+item.model) }}</p>
               </div>
             </cell>
             <div v-else-if="item.type === 'selectDate' && !item.hidden" :key="index" class="content">
               <p style="margin: 0;">
                 <label class="label" :class="{require2: item.validate&&item.validate.indexOf('required') !== -1}" :for="item.model"></label>
-                <datetime :min-year="1950" :class="'needsclick datetime '+(item.disabled?'listReadonly':'listEditable')+(item.value?'':' place-holder')" :readonly="item.disabled" :placeholder="item.placeholder || ('请选择' + item.label.substring(0, item.label.lastIndexOf(':') !== -1? item.label.lastIndexOf(':'): item.label.length))" :title="item.label" :name="item.model" v-validate="item.validate" :options="item.options" v-model="item.value"></datetime>
+                <datetime data-vv-scope="auto-form" :min-year="1950" :class="'needsclick datetime '+(item.disabled?'listReadonly':'listEditable')+(item.value?'':' place-holder')" :readonly="item.disabled" :placeholder="item.placeholder || ('请选择' + item.label.substring(0, item.label.lastIndexOf(':') !== -1? item.label.lastIndexOf(':'): item.label.length))" :title="item.label" :name="item.model" v-validate="item.validate" :options="item.options" v-model="item.value"></datetime>
               </p>
-              <p style="margin-left: 15px; margin-bottom: 5px;" v-show="errorv.has(item.model)" class="help is-danger">{{ errorv.first(item.model) }}</p>
+              <p style="margin-left: 15px; margin-bottom: 5px;" v-show="errorv.has('auto-form.'+item.model)" class="help is-danger">{{ errorv.first('auto-form.'+item.model) }}</p>
             </div>
             <cell v-else-if="item.type === 'mobileValidate'" :key="index">
               <div class="content" slot="title">
                 <p class="mobile-validate">
                   <label class="label" :class="{require: item.validate&&item.validate.indexOf('required') !== -1}" :for="item.model">{{item.label}}</label>
-                  <input :disabled="item.disabled" v-model="item.value" v-validate="item.validate" :class="{'input': true, 'is-danger': errorv.has(item.model) }" :name="item.model" type="text" :placeholder="item.placeholder || ('请输入' + item.label.substring(0, item.label.lastIndexOf(':') !== -1? item.label.lastIndexOf(':'): item.label.length))" @change="onInputChange(item)">
+                  <input :disabled="item.disabled" v-model="item.value" v-validate="item.validate" :class="{'input': true, 'is-danger': errorv.has('auto-form.' + item.model) }" :name="item.model" type="text" :placeholder="item.placeholder || ('请输入' + item.label.substring(0, item.label.lastIndexOf(':') !== -1? item.label.lastIndexOf(':'): item.label.length))" @change="onInputChange(item)">
                   <x-button action-type="button" type="primary" mini :disabled="item.shutDownTime !== 0 || !item.fetchEnable" @click.native="onMobileValidateFetch(item)">{{item.shutDownTime===0?'获取验证码':(item.shutDownTime+'秒')}}</x-button>
                 </p>
-                <p v-show="errorv.has(item.model)" class="help is-danger">{{ errorv.first(item.model) }}</p>
+                <p v-show="errorv.has('auto-form.'+item.model)" class="help is-danger">{{ errorv.first('auto-form.'+item.model) }}</p>
               </div>
             </cell>
-            <cell-box style="display: block;" v-else-if="item.type === 'itemCellList'" :key="index">
-              <div class="content itemCellList" v-for="(arr, index) in item.group" :key="index">
-                <div class="title">{{item.list[arr[0]].workTypeDesc}}</div>
-                <div class="item" v-for="(ite, i) in arr" :key="i">
-                  <p>{{item.list[ite].itemNameDesc+'('+item.list[ite].licenLevel+')【'+item.list[ite].effecDate+'】'}}</p>
-                  <div class="control">
-                    <a @click="onitemCellListAction(item.list[ite], 'del', ite)">删除</a>
-                    <a @click="onitemCellListAction(item.list[ite], 'edit', ite)">编辑</a>
-                  </div>
-                </div>
-              </div>
-            </cell-box>
           </template>
         </group>
         <template v-else>
@@ -141,9 +117,7 @@
             <button v-for="(item, index) in items.buttons" :key="index" :class="item.type === 'primary'? 'btn-primary': 'btn-normal'" @click="onButtonAction(item.action)" type="button">{{item.name}}</button>
           </div>
         </template>
-
       </template>
-
     </form>
   </div>
 </template>
@@ -152,6 +126,8 @@
 import Vue from 'vue'
 import { Group, Cell, CellBox, Selector, XTextarea, Checker, CheckerItem, XButton, Datetime, Flexbox, FlexboxItem } from 'vux'
 import VeeValidate, { Validator } from 'vee-validate'
+import  { ToastPlugin } from 'vux'
+Vue.use(ToastPlugin)
 import CN from './zh_CN'
 import regex from './regex'
 import { is } from './utils'
@@ -314,17 +290,16 @@ export default {
   mounted: function () {
     this.data = this.formItems
     const obj = {}
-    this.validator = new Validator()
     for (let index = 0, arr = []; index < this.formItems.length; index++) {
       arr = this.formItems[index]
       for (let i = 0; i < arr.length; i++) {
         let item = arr[i]
         if (item.type === 'uploadFile') { // 添加照片的验证
-          // this.validator.attach(item.model, 'required')
+          // this.validator.attach(item.model, 'required', { scope: 'auto-form'})
           // obj[item.model] = item
-        } else if (item.type === 'passwordInput') {
-          this.validator.attach(item.model, item.validate)
-          obj[item.model] = item
+        } else if (item.type === 'listSelecter') {
+          // this.$validator.attach(item.model, item.validate, { scope: 'auto-form'})
+          // obj[item.model] = item
         } else if (item.type === 'mobileValidate' && item.fetchPassTime !== 0) { // 检查设置倒计时组件
           this.onMobileValidateFetch(item, item.fetchPassTime)
         }
@@ -385,9 +360,6 @@ export default {
           break
       }
     },
-    onitemCellListAction: function (item, action, index) {
-      this.$emit('handleItemCellListAction', { item, action, index })
-    },
     onSelectorChange: function (item) {
       this.$emit('handleSelectorChanged', item)
     },
@@ -435,26 +407,27 @@ export default {
         var item = keys[i]
         dic[item] = this.manaValidator[item].value
       }
-      const validator = this.validator
-      validator.validateAll(dic).then(result => {
+      this.$validator.validateAll().then(result => {
         if (!result) {
           // validation failed.
           const msgs = this.makeErrorMessage(validator.errors)
           if (msgs.length) {
             let msg = msgs[0]
+            this.$vux.toast.text(`${msg[0]}：${msg[1]}`)
             // this.$store.commit('showToast', { type: 'text', text: `${msg[0]}：${msg[1]}`, loading: true })
           } else {
+            this.$vux.toast.text('填写有误')
             // this.$store.commit('showToast', { type: 'text', text: '填写有误', loading: true })
           }
         } else {
-          this.$validator.validateAll().then((result) => {
+          this.$validator.validateAll('auto-form').then((result) => {
             if (!result) {
               const msgs = this.makeErrorMessage(this.$validator.errors)
               if (msgs.length) {
                 let msg = msgs[0]
-                // this.$store.commit('showToast', { type: 'text', text: `${msg[0]}：${msg[1]}`, loading: true })
+                this.$vux.toast.text(`${msg[0]}：${msg[1]}`)
               } else {
-                // this.$store.commit('showToast', { type: 'text', text: '填写有误', loading: true })
+                this.$vux.toast.text('填写有误')
               }
             } else {
               const formData = {}
@@ -741,41 +714,6 @@ export default {
   .vux-cell-box > div {
     width: 100%;
     padding: 0;
-  }
-  .itemCellList {
-    width: 100%;
-    text-align: left;
-    line-height: 1.3em;
-    .title {
-      color: #888;
-      margin: 8px 0 0px -8px;
-      font-size: 14px;
-    }
-    .item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-bottom: solid 1px #efefef;
-      p {
-        padding: 5px 0;
-        flex: 1 1 100%;
-        word-break: break-all;
-      }
-      .control {
-        flex: 0 0 85px;
-      }
-      a {
-        height: 30px;
-        line-height: 20px;
-        padding: 5px 5px;
-      }
-      a:first-child {
-        color: #f4333c;
-      }
-      a:last-child {
-        color: #09bb07;
-      }
-    }
   }
 
   .submit {

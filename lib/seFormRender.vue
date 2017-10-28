@@ -115,9 +115,6 @@
                 <p v-show="errorv.has('auto-form.'+item.model)" class="danger">{{ errorv.first('auto-form.'+item.model) }}</p>
               </div>
             </cell-box>
-            <cell-box v-else-if="item.component === 'upload'" :key="index">
-              <upload></upload>
-            </cell-box>
           </template>
         </group>
         <template v-else>

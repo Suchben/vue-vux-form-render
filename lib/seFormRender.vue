@@ -74,7 +74,7 @@
               <p style="margin-left: 15px;" v-show="errorv.has('auto-form.'+item.model)" class="help is-danger">{{ errorv.first('auto-form.'+item.model) }}</p>
             </div>
             <div class="content textInputField" v-else-if="item.type === 'textInputField'" :key="index">
-              <p style="margin: 0; display: flex; line-height: 1.3em;">
+              <p style="margin: 0; display: flex;">
                 <label style="padding: 10px 0 10px 15px; flex: 0 0 auto;" :class="{require: item.validate&&item.validate.indexOf('required') !== -1}" :for="item.model">{{item.label}}</label>
                 <x-textarea data-vv-scope="auto-form" ref="textInputField" :readonly="item.disabled" style="padding: 10px 6px; flex: 1 1 100%; word-break: break-all;" :rows="1" class="text-input" :name="item.model" v-model="item.value" v-validate="item.validate" :placeholder="item.placeholder || ('请输入' + item.label.substring(0, item.label.lastIndexOf(':') !== -1? item.label.lastIndexOf(':'): item.label.length))" autosize></x-textarea>
               </p>
@@ -107,6 +107,17 @@
                 <p v-show="errorv.has('auto-form.'+item.model)" class="help is-danger">{{ errorv.first('auto-form.'+item.model) }}</p>
               </div>
             </cell>
+            <cell-box v-else-if="item.component === 'inputField'" :key="index">
+              <div class="new-content">
+                <p style="margin: 0;">
+                  <input-field data-vv-scope="auto-form" :type="item.type" :label="item.label" :name="item.model" v-model="item.value" v-validate="item.validate" :validate="item.validate" :placeholder="item.placeholder"></input-field>
+                </p>
+                <p v-show="errorv.has('auto-form.'+item.model)" class="danger">{{ errorv.first('auto-form.'+item.model) }}</p>
+              </div>
+            </cell-box>
+            <cell-box v-else-if="item.component === 'upload'" :key="index">
+              <upload></upload>
+            </cell-box>
           </template>
         </group>
         <template v-else>
@@ -125,140 +136,16 @@
 <script>
 import Vue from 'vue'
 import { Group, Cell, CellBox, Selector, XTextarea, Checker, CheckerItem, XButton, Datetime, Flexbox, FlexboxItem } from 'vux'
-import VeeValidate, { Validator } from 'vee-validate'
-import  { ToastPlugin } from 'vux'
+import { ToastPlugin } from 'vux'
 Vue.use(ToastPlugin)
-import CN from './zh_CN'
-import regex from './regex'
-import { is } from './utils'
+import { is } from './js/utils'
 import VueCoreImageUpload from 'vue-core-image-upload'
-import config from './config'
-import { _mapForm } from './helper'
+import config from './js/config'
+import { _mapForm } from './js/helper'
 import logoSrc from './person.jpeg'
-Validator.addLocale(CN)
 
-Validator.extend('mobile', {
-  messages: {
-    zh_CN: field => '请输入11位手机号码'
-  },
-  validate: value => {
-    return value.length === 11 && /^((13|14|15|17|18)[0-9]{1}\d{8})$/.test(value)
-  }
-})
-
-Validator.extend('password', {
-  messages: {
-    zh_CN: field => '6至18位：字母、数字和下划线'
-  },
-  validate: value => {
-    return /^[a-zA-Z0-9_]{6,18}$/.test(value)
-  }
-})
-
-Validator.extend('phone', {
-  messages: {
-    zh_CN: field => '请输入电话号码'
-  },
-  validate: value => {
-    // /^(0[0-9]{2,3}/-)?([2-9][0-9]{6,7})+(/-[0-9]{1,4})?$/.test(value)
-    return /^((0\d{2}-\d{8}(-\d{1,4})?)|(0\d{3}-\d{7,8}(-\d{1,4})?))$/.test(value)
-  }
-})
-
-Validator.extend('highSchool', {
-  messages: {
-    zh_CN: field => '该作业项目要求您的学历在高中或者高中以上'
-  },
-  validate: value => {
-    return /[^AB]/.test(value)
-  }
-})
-
-Validator.extend('postcode', {
-  messages: {
-    zh_CN: field => '请输入6位邮政编码'
-  },
-  validate: value => {
-    return /^[1-9]\d{5}$/.test(value)
-  }
-})
-
-Validator.extend('typeID', {
-  messages: {
-    zh_CN: field => '请输入正确的身份证号码'
-  },
-  validate: value => {
-    return regex.isTypeID(value)
-  }
-})
-
-Validator.extend('typeIDMinAge18', {
-  messages: {
-    zh_CN: field => '您的年龄应满18周岁'
-  },
-  validate: value => {
-    let date, now
-    if (value.length === 18) {
-      date = new Date(value.substr(6, 4) + '-' + value.substr(10, 2) + '-' + value.substr(12, 2))
-      date.setFullYear(date.getFullYear() + 18)
-      now = new Date()
-      return now >= date
-    } else {
-      return false
-    }
-  }
-})
-
-Validator.extend('birthdayMinAge18', {
-  messages: {
-    zh_CN: field => '您的年龄应满18周岁'
-  },
-  validate: value => {
-    let date, now
-    date = new Date(value)
-    date.setFullYear(date.getFullYear() + 18)
-    now = new Date()
-    return now >= date
-  }
-})
-
-Validator.extend('typeIDMaxAge60', {
-  messages: {
-    zh_CN: field => '您的年龄应不大于60周岁'
-  },
-  validate: value => {
-    let date, now
-    if (value.length === 18) {
-      date = new Date(value.substr(6, 4) + '-' + value.substr(10, 2) + '-' + value.substr(12, 2))
-      date.setFullYear(date.getFullYear() + 60)
-      now = new Date()
-      return now <= date
-    } else {
-      return false
-    }
-  }
-})
-
-Validator.extend('birthdayMaxAge60', {
-  messages: {
-    zh_CN: field => '您的年龄应不大于60周岁'
-  },
-  validate: value => {
-    let date, now
-    date = new Date(value)
-    date.setFullYear(date.getFullYear() + 60)
-    now = new Date()
-    return now <= date
-  }
-})
-
-Validator.updateDictionary({
-  zh_CN: {
-    messages: {
-      required: (a) => '此项必填！'
-    }
-  }
-})
+import InputField from './components/inputField'
+import VeeValidate from './js/veeValidate'
 
 const _config = {
   errorBagName: 'errorv', // change if property conflicts.
@@ -284,7 +171,7 @@ Vue.use(VeeValidate, _config)
 
 export default {
   components: {
-    Group, Cell, CellBox, Selector, XTextarea, Checker, CheckerItem, XButton, Datetime, VueCoreImageUpload, Flexbox, FlexboxItem
+    Group, Cell, CellBox, Selector, XTextarea, Checker, CheckerItem, XButton, Datetime, VueCoreImageUpload, Flexbox, FlexboxItem, InputField
   },
   // lifecycle
   mounted: function () {
@@ -294,13 +181,7 @@ export default {
       arr = this.formItems[index]
       for (let i = 0; i < arr.length; i++) {
         let item = arr[i]
-        if (item.type === 'uploadFile') { // 添加照片的验证
-          // this.validator.attach(item.model, 'required', { scope: 'auto-form'})
-          // obj[item.model] = item
-        } else if (item.type === 'listSelecter') {
-          // this.$validator.attach(item.model, item.validate, { scope: 'auto-form'})
-          // obj[item.model] = item
-        } else if (item.type === 'mobileValidate' && item.fetchPassTime !== 0) { // 检查设置倒计时组件
+        if (item.type === 'mobileValidate' && item.fetchPassTime !== 0) { // 检查设置倒计时组件
           this.onMobileValidateFetch(item, item.fetchPassTime)
         }
       }
@@ -319,8 +200,7 @@ export default {
       data: [],
       coreImageData: {},
       manaValidator: {},
-      logoSrc: logoSrc,
-      validator: ''
+      logoSrc: logoSrc
     }
   },
   computed: {
@@ -482,7 +362,6 @@ export default {
         ctx.drawImage(image, 0, 0, 413, 626)
         item.value = canvas.toDataURL('image/jpeg', 0.5)
         this.count++
-        this.validator.validate(item.model, item.value)
         this.$emit('onImageChanged', data)
       }
     }
@@ -735,10 +614,17 @@ export default {
   .btn-primary {
     font-size: 15px;
     color: white;
-    background-color: #09BB07;
-    border: solid 1px #09BB07;
+    background-color: #09bb07;
+    border: solid 1px #09bb07;
     border-radius: 4px;
     padding: 8px 10px;
+  }
+  .new-content {
+    .danger {
+      font-size: 11px;
+      line-height: 1em;
+      color: red;
+    }
   }
 }
 </style>

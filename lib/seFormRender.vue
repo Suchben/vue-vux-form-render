@@ -91,9 +91,12 @@
               </div>
             </cell>
             <div v-else-if="item.type === 'selectDate' && !item.hidden" :key="index" class="content">
-              <p style="margin: 0;">
+              <p style="margin: 0; position: relative;">
                 <label class="label" :class="{require2: item.validate&&item.validate.indexOf('required') !== -1}" :for="item.model"></label>
-                <datetime data-vv-scope="auto-form" :min-year="1950" :class="'needsclick datetime '+(item.disabled?'listReadonly':'listEditable')+(item.value?'':' place-holder')" :readonly="item.disabled" :placeholder="item.placeholder || ('请选择' + item.label.substring(0, item.label.lastIndexOf(':') !== -1? item.label.lastIndexOf(':'): item.label.length))" :title="item.label" :name="item.model" v-validate="item.validate" :options="item.options" v-model="item.value"></datetime>
+                <datetime data-vv-scope="auto-form" :min-year="1950" :format="item.format" :class="'needsclick datetime '+(item.disabled?'listReadonly':'listEditable')+(item.value?'':' place-holder')" :readonly="item.disabled" :placeholder="item.placeholder || ('请选择' + item.label.substring(0, item.label.lastIndexOf(':') !== -1? item.label.lastIndexOf(':'): item.label.length))" :title="item.label" :name="item.model" v-validate="item.validate" :options="item.options" v-model="item.value" @on-change="onDateChange(item)"></datetime>
+                <span v-if="item.value" @click="item.value = ''" class="close-icon">
+                  <i>×</i>
+                </span>
               </p>
               <p style="margin-left: 15px; margin-bottom: 5px;" v-show="errorv.has('auto-form.'+item.model)" class="help is-danger">{{ errorv.first('auto-form.'+item.model) }}</p>
             </div>
@@ -110,7 +113,7 @@
             <cell-box v-else-if="item.component === 'inputField'" :key="index">
               <div class="new-content">
                 <p style="margin: 0;">
-                  <input-field data-vv-scope="auto-form" :type="item.type" :label="item.label" :name="item.model" v-model="item.value" v-validate="item.validate" :validate="item.validate" :placeholder="item.placeholder"></input-field>
+                  <input-field data-vv-scope="auto-form" :type="item.type" :label="item.label" :name="item.model" data-vv-value-path="text" v-model="item.value" v-validate="item.validate" :validate="item.validate" :placeholder="item.placeholder"></input-field>
                 </p>
                 <p v-show="errorv.has('auto-form.'+item.model)" class="danger">{{ errorv.first('auto-form.'+item.model) }}</p>
               </div>
@@ -238,6 +241,9 @@ export default {
       }
     },
     onSelectorChange: function (item) {
+      this.$emit('handleSelectorChanged', item)
+    },
+    onDateChange: function (item) {
       this.$emit('handleSelectorChanged', item)
     },
     onPageSelecterClick: function (e) {
@@ -622,6 +628,25 @@ export default {
       line-height: 1em;
       color: red;
     }
+  }
+  .close-icon {
+    height: 46px;
+    width: 30px;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    i {
+      font-size: 20px;
+      color: white;
+      width: 20px;
+      height: 20px;
+      background-color: #bbb;
+      border-radius: 13px;
+      text-align: center;
+    }
+    right: 30px;
+    top: 0px;
   }
 }
 </style>
